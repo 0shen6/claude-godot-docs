@@ -27,6 +27,7 @@ data/                   godot_docs_index.db (prebuilt index), concepts.json (con
                         embedding vectors are built here (not committed)
 models/gdocs-bge-small/ fine-tuned embedding model (int8 ONNX) for semantic/hybrid search
 skills/godot-docs/      Claude Code skill
+hooks/                  Claude Code hook that reminds Claude to use the skill on GDScript work
 tests/                  unit + smoke tests
 eval/                   search-quality benchmark (eval_queries.py), query sets, pooled judging (pool.py, judgments/)
 train/                  embedding fine-tuning (train_embed.py), ranking/confidence fitting, sweeps; results/ logs
@@ -75,6 +76,30 @@ Add the repository folder to your PATH to use it anywhere:
 - **Per project:** copy it to `<game repo>/.claude/skills/` so it's committed for the whole team.
 
 If `gdocs` isn't on PATH, update the fallback path (`<repo>/src/godot_docs.py`) in the skill's "Running it" section.
+
+On Windows, a junction keeps the per-user install in sync with this repository instead of a copy (PowerShell):
+`New-Item -ItemType Junction -Path "$env:USERPROFILE\.claude\skills\godot-docs" -Target "<this folder>\skills\godot-docs"`.
+
+### Making Claude use it every time
+
+Claude loads a skill when it judges the task matches the skill's description, so a small GDScript edit can
+slip by. `hooks/godot_skill_reminder.py` closes that gap. It adds a one-line reminder to load the skill:
+- on every prompt when the session's folder (or a parent) contains `project.godot` (`UserPromptSubmit`);
+- before every `Write`/`Edit` of a `.gd`, `.tscn` or `.tres` file (`PreToolUse`).
+
+It prints nothing otherwise and never blocks. Register it in `~/.claude/settings.json` (or a game repo's
+`.claude/settings.json`), adjusting the path:
+```json
+"hooks": {
+  "UserPromptSubmit": [
+    { "hooks": [{ "type": "command", "command": "python <this folder>/hooks/godot_skill_reminder.py", "timeout": 10 }] }
+  ],
+  "PreToolUse": [
+    { "matcher": "Write|Edit",
+      "hooks": [{ "type": "command", "command": "python <this folder>/hooks/godot_skill_reminder.py", "timeout": 10 }] }
+  ]
+}
+```
 
 ## Commands
 

@@ -1,6 +1,6 @@
 ---
 name: godot-docs
-description: Search and read the official Godot 4.5 documentation offline (class reference + manual) with the `gdocs` CLI. Use whenever writing, reviewing or debugging GDScript/Godot code, when unsure whether a class, method, property, signal, annotation or constant exists or what its exact signature is, when answering "how do I ... in Godot" questions, and when code may contain Godot 3 APIs (KinematicBody2D, yield, onready, export var, rand_range, instance(), setget, ...) or deprecated ones (TileMap, ParallaxBackground).
+description: Search and read the official Godot 4.5 documentation offline (class reference + manual) with the `gdocs` CLI. ALWAYS load this before writing or editing any GDScript (.gd files, or GDScript inside .tscn/.tres), even small edits, and in any folder with a project.godot. Also use whenever reviewing or debugging GDScript/Godot code, when unsure whether a class, method, property, signal, annotation or constant exists or what its exact signature is, when answering "how do I ... in Godot" questions, and when code may contain Godot 3 APIs (KinematicBody2D, yield, onready, export var, rand_range, instance(), setget, ...) or deprecated ones (TileMap, ParallaxBackground).
 ---
 
 # Godot docs search (`gdocs`)
@@ -11,7 +11,7 @@ reference (about 1,000 classes, 23,000 members) and the manual (about 490 pages,
 Treat its output as the source of truth over your memory.
 
 **Run it:** `gdocs <command> ...`. If `gdocs` isn't on PATH, use
-`python C:/Users/ozano/Desktop/gdocs/src/godot_docs.py <command> ...` (or find `godot_docs.py`). Python 3.9+,
+`python C:/Users/HP/Desktop/claude-godot-docs/src/godot_docs.py <command> ...` (or find `godot_docs.py`). Python 3.9+,
 no packages, no network, under half a second per call. A stderr line starting `[godot_docs] WARNING:`
 means it is using its existing index; results are valid, so carry on.
 
